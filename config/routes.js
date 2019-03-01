@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const Users = require('../users/users-modules.js');
 
 const { authenticate } = require('../auth/authenticate');
+const { generateToken } = require('../auth/generateToken');
 
 const errors = {
   '19': 'Username taken, pick a different one.'
@@ -24,8 +25,12 @@ async function register(req, res) {
     userData.password = hash;
 
     try {
-      const userId = await Users.addUser(userData);
-      res.status(201).json({ userId });
+      await Users.addUser(userData);
+      const token = generateToken(userData);
+      res.status(200).json({
+        message: `Welcome, ${userData.username}`,
+        token,
+      });
     } catch (error) {
       const msg = errors[error.errno] || error;
       res.status(500).json({ msg });
@@ -35,8 +40,24 @@ async function register(req, res) {
   }
 }
 
-function login(req, res) {
+async function login(req, res) {
   // implement user login
+  const { username, password } = req.body;
+
+  try {
+    const userData = await Users.findUserBy({ username });
+    if (userData && bcrypt.compareSync(password, userData.password)){
+      const token = generateToken(userData);
+      res.status(200).json({
+        message: `Welcome, ${userData.username}`,
+        token,
+      });
+    } else {
+      res.status(401).json({ message: "Wrong username or password." });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
 }
 
 function getJokes(req, res) {
