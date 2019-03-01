@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 
 import './App.css';
 import Login from './LoginComponents/Login';
@@ -16,6 +16,10 @@ class App extends Component {
             &nbsp;|&nbsp;
             <NavLink to="/register">Register</NavLink>
             &nbsp;|&nbsp;
+            <button onClick={ () => {
+              localStorage.removeItem('jwt');
+              this.props.history.push('/login');
+            }}>Log Out</button>
           </nav>
         </header>
         <main>
@@ -28,4 +32,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
