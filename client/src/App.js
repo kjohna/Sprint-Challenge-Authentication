@@ -3,6 +3,7 @@ import { Route, NavLink } from 'react-router-dom';
 
 import './App.css';
 import Login from './LoginComponents/Login';
+import Jokes from './JokesComponents/Jokes';
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
         </header>
         <main>
           <Route path="/login" component={Login} />
+          <Route path="/jokes" component={Jokes} />
         </main>
       </div>
     );
