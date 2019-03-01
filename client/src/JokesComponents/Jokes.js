@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../api/api';
 
-// import requireAuth from '../auth/requireAuth';
+import requiresAuth from '../auth/requiresAuth';
 
 class Jokes extends React.Component {
   state = {
@@ -36,4 +36,4 @@ class Jokes extends React.Component {
   }
 }
 
-export default Jokes;
+export default requiresAuth(Jokes);
