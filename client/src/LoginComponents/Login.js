@@ -7,18 +7,34 @@ class Login extends React.Component {
     password: "",
   }
 
+  onChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    api.post('/login', this.state)
+      .then(res => {
+        localStorage.setItem('jwt', res.data.token);
+        this.props.history.push('/jokes');
+      })
+      .catch( err => console.error(err));
+  }
+
   render() {
     return (
       <>
       <h2>Log In</h2>
-      <form onSubmit={""} autoComplete="off">
+      <form onSubmit={this.onSubmit} autoComplete="off">
         <div>
           <label htmlFor="username"/>
           <input
             name="username"
             id="username"
             value={this.state.username}
-            onChange={""}
+            onChange={this.onChange}
             type="text"
           />
         </div>
@@ -28,7 +44,7 @@ class Login extends React.Component {
             name="password"
             id="password"
             value={this.state.password}
-            onChange={""}
+            onChange={this.onChange}
             type="password"
           />
         </div>
